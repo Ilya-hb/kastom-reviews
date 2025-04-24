@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+body {
+  background-color: rgb(39, 39, 39);
+}
+
+@theme {
+  --color-logo: #f3784e;
+  --color-darker-logo: #d36641;
+}
