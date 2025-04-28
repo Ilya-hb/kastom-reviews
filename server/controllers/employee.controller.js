@@ -1,4 +1,4 @@
-import Employee from "../models/employees.model.js";
+import Employee from "../models/employee.model.js";
 
 export const getEmployee = async (req, res) => {
   try {
@@ -8,7 +8,7 @@ export const getEmployee = async (req, res) => {
     console.log(`Error in fetching Employees: `, error.message);
     res
       .status(500)
-      .json({ succes: false, message: "Server GET Employees error" });
+      .json({ success: false, message: "Server GET Employees error" });
   }
 };
 
@@ -25,7 +25,7 @@ export const postEmployee = async (req, res) => {
     res.status(201).json({ success: true, data: newEmployee });
   } catch (error) {
     console.error("Error in creating Employee: ", error.message);
-    res.status(300).json({ succes: false, message: "Server error" });
+    res.status(300).json({ success: false, message: "Server error" });
   }
 };
 
@@ -38,6 +38,6 @@ export const deleteEmployee = async (req, res) => {
     res.status(200).json({ success: true, message: "Employee deleted" });
   } catch (error) {
     console.log("Error in deleting Employee: ", error.message);
-    res.status(404).json({ succes: false, message: "Employee was not found" });
+    res.status(404).json({ success: false, message: "Employee was not found" });
   }
 };
