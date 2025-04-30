@@ -2,9 +2,19 @@
 
 body {
   background-color: rgb(39, 39, 39);
+  color: white;
 }
 
 @theme {
   --color-logo: #f3784e;
   --color-darker-logo: #d36641;
+}
+
+.link {
+  color: white;
+  font-size: var(--text-4xl);
+  transition: all 0.3s;
+}
+.link:hover {
+  color: var(--color-logo);
 }
