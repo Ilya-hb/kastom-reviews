@@ -1,10 +1,20 @@
-import { Routes, Route, Link } from "react-router";
-import Admin from "./pages/Admin";
-import Login from "./pages/Login";
+import { useEffect, useState } from "react";
 import avatar from "./assets/avatar.png";
 import avatar2 from "./assets/avatar2.png";
+import axios from "axios";
 
 function App() {
+  const [employee, setEmployee] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/employee")
+      .then((res) => {
+        console.log(res.data.data);
+        setEmployee(res.data.data);
+      })
+      .catch((error) => console.log(error.message));
+  }, []);
+
   return (
     <>
       <div className="flex flex-col pt-10 items-center h-screen space-y-5 container mx-auto">
@@ -38,7 +48,7 @@ function App() {
           </h2>
         </div>
         <div className="grid grid-cols-2 gap-4 justify-center items-center space-x-10">
-          <div className="flex flex-col items-center space-y-5">
+          <div className="flex flex-col items-center space-y-5 hover:scale-105 transition duration-200 cursor-pointer">
             <img
               src={avatar}
               alt=""
@@ -47,7 +57,7 @@ function App() {
             <h4 className="text-xl">Халид Кащмири</h4>
           </div>
 
-          <div className="flex flex-col items-center space-y-5">
+          <div className="flex flex-col items-center space-y-5 hover:scale-105 transition duration-200 cursor-pointer">
             <img
               src={avatar2}
               alt=""
