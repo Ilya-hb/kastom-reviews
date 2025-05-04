@@ -22,6 +22,14 @@ export default function Admin() {
     setEmployees(employees.filter((el) => el._id !== id));
   };
 
+  const handleCreate = async () => {
+    await axios.post(`http://localhost:3000/api/employee`, { employeeName });
+    const updatedList = await axios.get(`http://localhost:3000/api/employee`);
+    setEmployees(updatedList.data);
+    setEmployeeName("");
+    setEmployeeImage(null);
+  };
+
   return (
     <div className="flex justify-center items-center flex-col container py-10 mx-auto">
       <div className=" flex items-center gap-4">
@@ -34,7 +42,10 @@ export default function Admin() {
         </Link>
       </div>
       <h2 className="text-3xl">Создать сотрудника</h2>
-      <form className="my-5 gap-3 flex flex-col">
+      <form
+        className="my-5 gap-3 flex flex-col"
+        onSubmit={handleCreate}
+      >
         <input
           type="text"
           placeholder="Имя сотрудника"
