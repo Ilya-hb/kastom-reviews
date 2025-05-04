@@ -18,3 +18,12 @@ body {
 .link:hover {
   color: var(--color-logo);
 }
+
+.icon {
+  font-size: var(--text-5xl);
+  cursor: pointer;
+  transition: all, 0.15s;
+}
+.icon:hover {
+  scale: 1.15;
+}
