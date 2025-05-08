@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Employee from "./components/Employee";
 import { Link } from "react-router";
+import Loader from "./components/Loader";
 
 function App() {
   const [employees, setEmployees] = useState([]);
@@ -20,6 +21,8 @@ function App() {
   const handleReview = async (e, id) => {
     e.preventDefault();
   };
+
+  if (!employees) return <Loader />;
 
   return (
     <>
