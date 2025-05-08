@@ -12,19 +12,17 @@ export default function Admin() {
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/employee")
-      .then((res) => setEmployees(res.data.data));
+    axios.get("/api//employee").then((res) => setEmployees(res.data.data));
   }, []);
 
   const handleDeleteEmployee = async (id) => {
-    await axios.delete(`http://localhost:3000/api/employee/${id}`);
+    await axios.delete(`/api//employee/${id}`);
     setEmployees(employees.filter((el) => el._id !== id));
   };
 
   const handleCreate = async () => {
-    await axios.post(`http://localhost:3000/api/employee`, { employeeName });
-    const updatedList = await axios.get(`http://localhost:3000/api/employee`);
+    await axios.post(`/api//employee`, { employeeName });
+    const updatedList = await axios.get(`/api//employee`);
     setEmployees(updatedList.data);
     setEmployeeName("");
     setEmployeeImage(null);
@@ -41,6 +39,7 @@ export default function Admin() {
           <MdLogout />
         </Link>
       </div>
+      <hr className="w-15 h-2 my-5" />
       <h2 className="text-3xl">Создать сотрудника</h2>
       <form
         className="my-5 gap-3 flex flex-col"

@@ -6,6 +6,7 @@ import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import "./index.css";
 import App from "./App.jsx";
+import EmployeePage from "./pages/EmployeePage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -18,10 +19,14 @@ createRoot(document.getElementById("root")).render(
         <Route
           path="/login"
           element={<Login />}
-        ></Route>
+        />
         <Route
           path="/admin"
           element={<Admin />}
+        />
+        <Route
+          path="/employee/:id"
+          element={<EmployeePage />}
         />
       </Routes>
     </BrowserRouter>
