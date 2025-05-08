@@ -3,12 +3,15 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import reviewRoutes from "./routes/review.route.js";
 import employeeRoute from "./routes/employee.route.js";
+import cors from "cors";
 dotenv.config();
 const app = express();
 
 app.use(express.json()); // allows us to accept JSON data in the req.body
+app.use(cors());
 app.use("/api/", reviewRoutes);
 app.use("/api/", employeeRoute);
+
 app.listen(3000, () => {
   connectDB();
   console.log("Server started at http://localhost:3000 hello");

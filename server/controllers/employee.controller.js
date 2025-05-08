@@ -12,6 +12,18 @@ export const getEmployee = async (req, res) => {
   }
 };
 
+export const getEmployeeByID = async (req, res) => {
+  try {
+    const employee = await Employee.findById(req.params.id).populate("reviews");
+    res.status(200).json({ success: true, data: employee });
+  } catch (error) {
+    console.log(`Error in getting employee by ID`, error.message);
+    res
+      .status(500)
+      .json({ success: false, message: "Server GET Employee by ID error" });
+  }
+};
+
 export const postEmployee = async (req, res) => {
   const employee = req.body;
   if (!employee.employeeName) {

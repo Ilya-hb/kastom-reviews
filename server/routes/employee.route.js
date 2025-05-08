@@ -3,11 +3,14 @@ import {
   getEmployee,
   deleteEmployee,
   postEmployee,
+  getEmployeeByID,
 } from "../controllers/employee.controller.js";
 
 const router = express.Router();
 
 router.get("/employee", getEmployee);
+
+router.get("/employee/:id", getEmployeeByID);
 
 router.post("/employee", postEmployee);
 
