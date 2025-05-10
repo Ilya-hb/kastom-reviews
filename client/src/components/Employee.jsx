@@ -1,10 +1,19 @@
 import React from "react";
 import avatar from "../assets/avatar.png";
 
-export default function Employee({ employeeName, averageRating, reviews }) {
+export default function Employee({
+  employeeName,
+  averageRating,
+  reviews,
+  clickable = false,
+}) {
   console.log(employeeName, averageRating, reviews);
   return (
-    <div className="flex flex-col items-center space-y-5 hover:scale-105 transition duration-200 cursor-pointer">
+    <div
+      className={`flex flex-col items-center space-y-5 hover transition duration-200 ${
+        clickable ? "cursor-pointer hover:scale-105" : ""
+      } `}
+    >
       <img
         src={avatar}
         alt="Employee avatar"

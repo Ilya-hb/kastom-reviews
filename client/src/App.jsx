@@ -43,7 +43,10 @@ function App() {
               key={el._id}
             >
               <Link to={`/employee/${el._id}`}>
-                <Employee employeeName={el.employeeName} />
+                <Employee
+                  employeeName={el.employeeName}
+                  clickable={true}
+                />
                 {/* При нажатии открываеся страница с сотрудником */}
               </Link>
 
