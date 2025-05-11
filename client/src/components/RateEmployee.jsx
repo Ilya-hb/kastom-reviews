@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { LuBolt } from "react-icons/lu";
 
-export default function RateEmployee({ count = 5 }) {
-  const [rating, setRating] = useState(null);
+export default function RateEmployee({ count = 5, rating, setRating }) {
   const [hover, setHover] = useState(0);
 
   const handleClick = (currentId) => {
@@ -18,7 +17,7 @@ export default function RateEmployee({ count = 5 }) {
   };
 
   return (
-    <div className="flex items-center justify-center mt-10 text-5xl space-x-1">
+    <div className="flex items-center justify-center text-5xl space-x-1">
       {[...Array(count)].map((_, index) => {
         index += 1;
         return (

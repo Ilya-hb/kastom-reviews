@@ -8,12 +8,16 @@ import RateEmployee from "../components/RateEmployee";
 export default function EmployeePage() {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
+  const [review, setReview] = useState("");
+  const [rating, setRating] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
+  console.log(review);
   useEffect(() => {
     axios
       .get(`/api/employee/${id}`)
       .then((res) => {
-        console.log(res.data.data);
         setEmployee(res.data.data);
       })
       .catch((error) => console.log(`Error: ${error.message}`));
@@ -22,12 +26,72 @@ export default function EmployeePage() {
   if (!employee) {
     return <Loader />;
   }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!review.trim()) {
+      setError("Будь ласка, введіть текст відгуку");
+      return;
+    }
+    if (!rating) {
+      setError("Будь ласка, оберіть оцінку");
+      return;
+    }
+    setIsLoading(true);
+    setError("");
+    try {
+      await axios.post(`/api/employee/${id}/review`, {
+        reviewText: review,
+        reviewMark: rating,
+      });
+      setReview("");
+      setRating(null);
+    } catch (error) {
+      console.log(error.message);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <>
-      <div className="container flex flex-col mx-auto pt-10">
-        <Employee employeeName={employee.employeeName} />
-        <RateEmployee />
-      </div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <form
+          className="container flex flex-col mx-auto pt-10 items-center justify-center gap-5 px-3"
+          onSubmit={handleSubmit}
+        >
+          <Employee employeeName={employee.employeeName} />
+          <RateEmployee
+            rating={rating}
+            setRating={setRating}
+          />
+          {/* <input
+            type="text"
+            className="border-2 border-logo px-4 py-2 w-full max-w-[250px] rounded-xl"
+            placeholder="Ваше імʼя (не обовʼязково)"
+          /> */}
+          <textarea
+            className={`border-2 ${
+              error ? "border-red-500" : "border-logo"
+            } px-4 py-2 w-full max-w-[350px] sm:w-[350px] sm:h-[100px] rounded-xl caret-amber-500 active:border-logo focus:border-logo`}
+            placeholder="Ваш відгук про співпробітника"
+            onChange={(e) => setReview(e.target.value)}
+          ></textarea>
+          <button
+            type="submit"
+            className="px-10 py-3 bg-logo hover:bg-darker-logo transition cursor-pointer rounded-xl active:bg-black"
+          >
+            Надіслати
+          </button>
+          {error && (
+            <span className="text-red-500 text-sm transition  text-center">
+              {error}
+            </span>
+          )}
+        </form>
+      )}
     </>
   );
 }

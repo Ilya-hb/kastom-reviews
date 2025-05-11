@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Login() {
   return (
     <div className="container mx-auto py-10 flex flex-col items-center">
