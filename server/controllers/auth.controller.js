@@ -9,7 +9,7 @@ export const loginAdmin = (req, res) => {
   };
 
   if (username === ADMIN.username && password === ADMIN.password) {
-    const token = jwt.sign({ role: admin }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ role: "admin" }, process.env.JWT_SECRET, {
       expiresIn: "12h",
     });
     return res.status(200).json({ success: true, token });
