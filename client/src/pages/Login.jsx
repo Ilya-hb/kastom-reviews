@@ -6,17 +6,19 @@ import axios from "axios";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    setError(null);
     try {
-      const res = axios.post("/api/login", { username, password });
+      const res = await axios.post("/api/login", { username, password });
       localStorage.setItem("token", res.data.token);
       navigate("/admin");
     } catch (error) {
-      alert("Wrong login or password");
+      if (error.status === 401) setError("Неверный логин или пароль");
+      else setError(error.message);
     }
   };
 
@@ -32,6 +34,7 @@ export default function Login() {
           placeholder="Login"
           onChange={(e) => setUsername(e.target.value)}
           className="border-black border-1 px-4 py-2 text-xl"
+          required
         />
         <input
           type="password"
@@ -39,6 +42,7 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           className="border-black border-1 px-4 py-2 text-xl"
           autoComplete="false"
+          required
         />
         <button
           type="submit"
@@ -46,20 +50,8 @@ export default function Login() {
         >
           Submit
         </button>
+        {error && <span className="text-red-500 text-md">Ошибка: {error}</span>}
       </div>
-
-      {/* <Link
-        to={"/"}
-        className="link"
-      >
-        Назад
-      </Link>
-      <Link
-        to={"/admin"}
-        className="link"
-      >
-        В админку
-      </Link> */}
     </form>
   );
 }

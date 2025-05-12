@@ -18,6 +18,11 @@ export default function Admin() {
     axios.get("/api//employee").then((res) => setEmployees(res.data.data));
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   const handleDeleteEmployee = async (id) => {
     await axios.delete(`/api//employee/${id}`);
     setEmployees(employees.filter((el) => el._id !== id));
@@ -35,12 +40,11 @@ export default function Admin() {
     <div className="flex justify-center items-center flex-col container py-10 mx-auto">
       <div className=" flex items-center gap-4">
         <h1 className="text-4xl">Admin Panel</h1>
-        <Link
-          to={"/login"}
-          className="link"
-        >
-          <MdLogout />
-        </Link>
+
+        <MdLogout
+          onClick={handleLogout}
+          className="link cursor-pointer"
+        />
       </div>
       <hr className="w-15 h-2 my-5" />
       <h2 className="text-3xl">Создать сотрудника</h2>
