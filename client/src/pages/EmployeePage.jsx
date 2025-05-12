@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Employee from "../components/Employee";
 import Loader from "../components/Loader";
 import RateEmployee from "../components/RateEmployee";
+import { HiArrowLongLeft } from "react-icons/hi2";
 
 export default function EmployeePage() {
   const { id } = useParams();
@@ -13,7 +14,6 @@ export default function EmployeePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  console.log(review);
   useEffect(() => {
     axios
       .get(`/api/employee/${id}`)
@@ -62,6 +62,13 @@ export default function EmployeePage() {
           className="container flex flex-col mx-auto pt-10 items-center justify-center gap-5 px-3"
           onSubmit={handleSubmit}
         >
+          <Link
+            to="/"
+            className="flex gap-2 items-center hover:text-logo transition duration-200 self-start cursor-pointer"
+          >
+            <HiArrowLongLeft className="text-4xl" />
+            <span className="text-md">Повернутись</span>
+          </Link>
           <Employee employeeName={employee.employeeName} />
           <RateEmployee
             rating={rating}

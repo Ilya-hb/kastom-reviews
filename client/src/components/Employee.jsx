@@ -7,7 +7,6 @@ export default function Employee({
   reviews,
   clickable = false,
 }) {
-  console.log(employeeName, averageRating, reviews);
   return (
     <div
       className={`flex flex-col items-center space-y-5 hover transition duration-200 ${
