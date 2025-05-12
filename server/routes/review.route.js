@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/", getReviews);
 
-router.post("/", postReview);
+router.post("/employee/:id/review", postReview);
 
 router.delete("/:id", deleteReview);
 

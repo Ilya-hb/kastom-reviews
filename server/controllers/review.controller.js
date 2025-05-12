@@ -1,5 +1,5 @@
 import Review from "../models/review.model.js";
-
+import Employee from "../models/employee.model.js";
 export const getReviews = async (req, res) => {
   try {
     const reviews = await Review.find({});
@@ -13,20 +13,29 @@ export const getReviews = async (req, res) => {
 };
 
 export const postReview = async (req, res) => {
-  const review = req.body; // user will send this data
-  if (!review.reviewText || !review.reviewMark) {
-    return res
-      .status(400)
-      .json({ message: "Пожалуйста, оставьте отзыв, спасибо!" });
-  }
+  const employeeId = req.params.id;
 
-  const newReview = new Review(review);
+  const { reviewText, reviewMark } = req.body;
+
+  if (!reviewText || !reviewMark)
+    return res.status(400).json({ message: "Будь ласка, заповніть усі поля!" });
+
   try {
-    await newReview.save();
-    res.status(201).json({ success: true, data: newReview });
+    const newReview = new Review({
+      employee: employeeId,
+      reviewText,
+      reviewMark,
+    });
+    const savedReview = await newReview.save();
+
+    await Employee.findByIdAndUpdate(employeeId, {
+      $push: { reviews: savedReview._id },
+    });
+
+    res.status(201).json({ success: true, data: savedReview });
   } catch (error) {
-    console.error("Error in create Review:", error.message);
-    res.status(500).json({ success: false, message: "Server error" });
+    console.log("Error in post Review:", error.message);
+    res.status(500).json({ success: false, message: "Помилка сервера" });
   }
 };
 
