@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { act, useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import avatar from "../assets/avatar.png";
 import { MdDeleteOutline } from "react-icons/md";
 import { MdOutlineEditNote } from "react-icons/md";
@@ -10,8 +10,11 @@ export default function Admin() {
   const [employeeName, setEmployeeName] = useState("");
   const [employeeImage, setEmployeeImage] = useState(null);
   const [employees, setEmployees] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) navigate("/login");
     axios.get("/api//employee").then((res) => setEmployees(res.data.data));
   }, []);
 

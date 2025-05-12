@@ -1,19 +1,44 @@
+import { useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 export default function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = axios.post("/api/login", { username, password });
+      localStorage.setItem("token", res.data.token);
+      navigate("/admin");
+    } catch (error) {
+      alert("Wrong login or password");
+    }
+  };
+
   return (
-    <div className="container mx-auto py-10 flex flex-col items-center">
+    <form
+      onSubmit={handleLogin}
+      className="container mx-auto py-10 flex flex-col items-center"
+    >
       <div className="rounded border-1 border-neutral-800 bg-neutral-700 gap-4 shadow-xs justify-center shadow-black p-10 flex flex-col items-center">
         <h2 className="text-4xl font-bold mr-3">Login page</h2>
         <input
           type="text"
-          name=""
-          id=""
           placeholder="Login"
+          onChange={(e) => setUsername(e.target.value)}
           className="border-black border-1 px-4 py-2 text-xl"
         />
         <input
           type="password"
           placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
           className="border-black border-1 px-4 py-2 text-xl"
+          autoComplete="false"
         />
         <button
           type="submit"
@@ -35,6 +60,6 @@ export default function Login() {
       >
         В админку
       </Link> */}
-    </div>
+    </form>
   );
 }
