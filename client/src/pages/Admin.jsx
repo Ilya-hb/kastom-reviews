@@ -8,7 +8,7 @@ import { MdLogout } from "react-icons/md";
 
 export default function Admin() {
   const [employeeName, setEmployeeName] = useState("");
-  const [employeeImage, setEmployeeImage] = useState(null);
+  const [employeeImage, setEmployeeImage] = useState(null); //TODO
   const [employees, setEmployees] = useState([]);
   const navigate = useNavigate();
 
@@ -75,7 +75,8 @@ export default function Admin() {
       <div className="bg-neutral-900 rounded-xl p-5 w-full max-w-[500px] space-y-5 my-5">
         {employees.length > 0 ? (
           employees.map((employee) => (
-            <div
+            <Link
+              to={`/admin/employee/${employee._id}`}
               key={employee._id}
               className="flex items-center justify-around border-b-1 border-neutral-500 p-2"
             >
@@ -94,7 +95,7 @@ export default function Admin() {
                   onClick={() => handleDeleteEmployee(employee._id)}
                 />
               </div>
-            </div>
+            </Link>
           ))
         ) : (
           <h4 className="text-white">Список сотрудников пуст</h4>

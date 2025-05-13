@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import "./index.css";
 import App from "./App.jsx";
 import EmployeePage from "./pages/EmployeePage.jsx";
+import AdminEmployee from "./pages/AdminEmployee.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -26,6 +27,10 @@ createRoot(document.getElementById("root")).render(
           <Route
             path="/admin"
             element={<Admin />}
+          />
+          <Route
+            path="/admin/employee/:id"
+            element={<AdminEmployee />}
           />
         </Route>
         <Route
