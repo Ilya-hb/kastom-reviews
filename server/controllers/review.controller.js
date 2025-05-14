@@ -1,5 +1,7 @@
 import Review from "../models/review.model.js";
 import Employee from "../models/employee.model.js";
+import { countAverageRating } from "../utils/countAverageRating.js";
+
 export const getReviews = async (req, res) => {
   try {
     const reviews = await Review.find({});
@@ -32,6 +34,8 @@ export const postReview = async (req, res) => {
       $push: { reviews: savedReview._id },
     });
 
+    await countAverageRating(employeeId);
+
     res.status(201).json({ success: true, data: savedReview });
   } catch (error) {
     console.log("Error in post Review:", error.message);
@@ -44,6 +48,7 @@ export const deleteReview = async (req, res) => {
   console.log("id:", id);
   try {
     await Review.findByIdAndDelete(id);
+    await countAverageRating(id);
     res.status(200).json({ success: true, message: "Review deleted" });
   } catch (error) {
     console.log("Error in deleting review: ", error.message);
