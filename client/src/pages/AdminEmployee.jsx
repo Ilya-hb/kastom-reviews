@@ -11,6 +11,7 @@ export default function AdminEmployee() {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [clickedReview, setClickedReview] = useState(false);
   const navigate = useNavigate();
 
   const formatDate = (unformattedData) => {
@@ -24,6 +25,7 @@ export default function AdminEmployee() {
       minute: "2-digit",
     });
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,6 +33,7 @@ export default function AdminEmployee() {
         const employeeData = res.data.data;
         setEmployee(employeeData);
         setReviews(employeeData.reviews);
+        console.log(employeeData.reviews);
       } catch (error) {
         console.log("Сотрудник не найден", error.message);
         navigate("/admin");
@@ -38,6 +41,11 @@ export default function AdminEmployee() {
     };
     fetchData();
   }, [id, navigate]);
+
+  const handleDeleteReview = async (id) => {
+    await axios.delete(`/api/${id}`);
+    setReviews(reviews.filter((el) => el._id !== id));
+  };
 
   if (!employee) return <Loader />;
 
@@ -71,8 +79,14 @@ export default function AdminEmployee() {
           reviews.map((el) => (
             <div
               key={el._id}
-              className="w-full p-1"
+              className="w-full p-1 relative cursor-pointer hover:scale-105 transition"
+              onClick={(el) => handleDeleteReview(el._id)}
             >
+              <div
+                className={`w-full transition bg-red-400 ${
+                  clickedReview ? "opacity-0 hidden" : "absolute opacity-100"
+                }`}
+              ></div>
               <div className="flex justify-between w-full">
                 <div className="flex items-center gap-2">
                   <p className="text-xl">Оценка: {el.reviewMark}</p>

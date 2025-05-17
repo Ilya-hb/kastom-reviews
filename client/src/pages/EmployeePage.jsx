@@ -73,6 +73,7 @@ export default function EmployeePage() {
           <RateEmployee
             rating={rating}
             setRating={setRating}
+            required
           />
           {/* <input
             type="text"
@@ -85,6 +86,7 @@ export default function EmployeePage() {
             } px-4 py-2 w-full max-w-[350px] sm:w-[350px] sm:h-[100px] rounded-xl caret-amber-500 active:border-logo focus:border-logo`}
             placeholder="Ваш відгук про співпробітника"
             onChange={(e) => setReview(e.target.value)}
+            required
           ></textarea>
           <button
             type="submit"

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { act, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import avatar from "../assets/avatar.png";
 import { MdDeleteOutline } from "react-icons/md";
@@ -20,7 +20,7 @@ export default function Admin() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/");
   };
 
   const handleDeleteEmployee = async (id) => {
@@ -28,8 +28,21 @@ export default function Admin() {
     setEmployees(employees.filter((el) => el._id !== id));
   };
 
-  const handleCreate = async () => {
-    await axios.post(`/api//employee`, { employeeName });
+  const handleCreate = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("employeeName", employeeName);
+    formData.append("employeeImage", employeeImage);
+
+    try {
+      await axios.post("/api/employee", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+
     const updatedList = await axios.get(`/api//employee`);
     setEmployees(updatedList.data);
     setEmployeeName("");
@@ -56,12 +69,14 @@ export default function Admin() {
           type="text"
           placeholder="Имя сотрудника"
           onChange={(e) => setEmployeeName(e.target.value)}
+          required
           className="w-full px-3 py-2 border rounded-md"
         />
         <p>Загрузите изображение</p>
         <input
           type="file"
-          className="cursor-pointer"
+          className="cursor-pointer hover:text-blue-500 transition"
+          onChange={(e) => setEmployeeImage(e.target.files[0])}
         />
         <button
           type="submit"
