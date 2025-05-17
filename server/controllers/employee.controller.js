@@ -25,14 +25,19 @@ export const getEmployeeByID = async (req, res) => {
 };
 
 export const postEmployee = async (req, res) => {
-  const employee = req.body;
-  if (!employee.employeeName) {
+  const { employeeName } = req.body;
+  const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
+
+  if (!employeeName) {
     return res
       .status(400)
       .json({ message: "Пожалуйста, напишите имя сотрудника" });
   }
-  const newEmployee = new Employee(employee);
   try {
+    const newEmployee = new Employee({
+      employeeName,
+      employeeImage: imagePath,
+    });
     await newEmployee.save();
     res.status(201).json({ success: true, data: newEmployee });
   } catch (error) {

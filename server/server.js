@@ -10,6 +10,7 @@ const app = express();
 
 app.use(express.json()); // allows us to accept JSON data in the req.body
 app.use(cors());
+app.use("/uploads", express.static("uploads"));
 app.use("/api/", reviewRoutes);
 app.use("/api/", employeeRoute);
 app.use("/api/", authRoute);
