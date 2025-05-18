@@ -1,15 +1,19 @@
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const authHeader = req.headers.authorization;
 
-  if (!token) return res.status(403).json({ message: "You don't have access" });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(403).json({ message: "Нет доступа: токен отсутствует" });
+  }
+
+  const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Wrong token" });
+    return res.status(403).json({ message: "Неверный токен" });
   }
 };

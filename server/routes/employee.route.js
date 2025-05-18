@@ -15,10 +15,13 @@ router.get("/employee", getEmployee);
 
 router.get("/employee/:id", getEmployeeByID);
 
-router.post("/employee", upload.single("employeeImage"), postEmployee);
+router.post(
+  "/employee",
+  verifyToken,
+  upload.single("employeeImage"),
+  postEmployee
+);
 
-router.post("/employee", verifyToken, postEmployee);
-
-router.delete("/employee/:id", deleteEmployee);
+router.delete("/employee/:id", verifyToken, deleteEmployee);
 
 export default router;

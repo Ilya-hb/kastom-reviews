@@ -26,8 +26,8 @@ export const getEmployeeByID = async (req, res) => {
 
 export const postEmployee = async (req, res) => {
   const { employeeName } = req.body;
-  const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
-
+  console.log(req.body);
+  console.log(req.file);
   if (!employeeName) {
     return res
       .status(400)
@@ -36,7 +36,7 @@ export const postEmployee = async (req, res) => {
   try {
     const newEmployee = new Employee({
       employeeName,
-      employeeImage: imagePath,
+      employeeImage: req.file?.path || "",
     });
     await newEmployee.save();
     res.status(201).json({ success: true, data: newEmployee });
