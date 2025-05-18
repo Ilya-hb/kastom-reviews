@@ -22,7 +22,6 @@ export default function Admin() {
     localStorage.removeItem("token");
     navigate("/");
   };
-
   const handleDeleteEmployee = async (id) => {
     await axios.delete(`/api//employee/${id}`);
     setEmployees(employees.filter((el) => el._id !== id));
@@ -30,23 +29,26 @@ export default function Admin() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append("employeeName", employeeName);
-    formData.append("employeeImage", employeeImage);
+    if (employeeImage) formData.append("employeeImage", employeeImage);
 
     try {
       await axios.post("/api/employee", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
+      const updatedList = await axios.get(`/api//employee`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      setEmployees(updatedList.data.data);
+      setEmployeeName("");
+      setEmployeeImage(null);
     } catch (error) {
-      console.log(error.message);
+      console.log(`Create employee failed: ${error.message}`);
     }
-
-    const updatedList = await axios.get(`/api//employee`);
-    setEmployees(updatedList.data);
-    setEmployeeName("");
-    setEmployeeImage(null);
   };
 
   return (
@@ -97,9 +99,9 @@ export default function Admin() {
             >
               <div className="flex w-1/2 flex-col items-center space-y-2 hover:scale-105 transition duration-200 cursor-pointer">
                 <img
-                  src={employee.employeeImage || avatar}
+                  src={employee.employeeImage}
                   alt="employee"
-                  className="w-20 h-20 rounded-full"
+                  className="w-30 h-30 rounded-full"
                 />
                 <h3 className="text-lg  font-bold">{employee.employeeName}</h3>
               </div>
