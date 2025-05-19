@@ -26,13 +26,14 @@ export default function Admin() {
     localStorage.removeItem("token");
     navigate("/");
   };
-  const handleDeleteEmployee = async (id) => {
+  const handleDeleteEmployee = async (e, id) => {
+    e.preventDefault();
     setIsLoading(true);
     await axios.delete(`/api//employee/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     setEmployees(employees.filter((el) => el._id !== id));
-    isLoading(false);
+    setIsLoading(false);
   };
 
   const handleCreate = async (e) => {
@@ -64,7 +65,7 @@ export default function Admin() {
   return (
     <div className="flex justify-center items-center flex-col container py-10 mx-auto relative">
       {isLoading && (
-        <div className="h-screen w-full absolute backdrop-blur-3xl">
+        <div className="h-screen w-screen absolute top-0 backdrop-blur-md">
           <Loader />
         </div>
       )}
@@ -124,7 +125,7 @@ export default function Admin() {
                 <MdOutlineEditNote className="text-blue-400 icon" />
                 <MdDeleteOutline
                   className=" text-red-500 icon"
-                  onClick={() => handleDeleteEmployee(employee._id)}
+                  onClick={(e) => handleDeleteEmployee(e, employee._id)}
                 />
               </div>
             </Link>

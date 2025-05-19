@@ -3,7 +3,7 @@ import logo from "../assets/logo.png";
 
 export default function Loader() {
   return (
-    <div className="h-screen bg-neutral-950 backdrop-blur-lg flex flex-col items-center justify-center ">
+    <div className="h-screen backdrop-blur flex flex-col items-center justify-center ">
       <img
         src={logo}
         className="max-w-[200px] md:max-w-[300px] animate-pulse"
