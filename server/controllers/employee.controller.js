@@ -1,3 +1,4 @@
+import cloudinary from "../middleware/upload.js";
 import Employee from "../models/employee.model.js";
 
 export const getEmployee = async (req, res) => {
@@ -28,6 +29,7 @@ export const postEmployee = async (req, res) => {
   const { employeeName } = req.body;
   console.log(req.body);
   console.log(req.file);
+
   if (!employeeName) {
     return res
       .status(400)
@@ -37,6 +39,7 @@ export const postEmployee = async (req, res) => {
     const newEmployee = new Employee({
       employeeName,
       employeeImage: req.file?.path || "",
+      employeeImagePublicId: req.file?.filename || "",
     });
     await newEmployee.save();
     res.status(201).json({ success: true, data: newEmployee });
@@ -51,6 +54,16 @@ export const deleteEmployee = async (req, res) => {
   console.log(`Employee id:`, id);
 
   try {
+    const employee = await Employee.findById(id);
+    if (!employee)
+      return res
+        .status(404)
+        .json({ success: false, message: "Employee not found" });
+
+    if (employee.employeeImagePublicId) {
+      await cloudinary.uploader.destroy(employee.employeeImagePublicId);
+    }
+
     await Employee.findByIdAndDelete(id);
     res.status(200).json({ success: true, message: "Employee deleted" });
   } catch (error) {

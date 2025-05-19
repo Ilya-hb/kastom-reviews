@@ -15,6 +15,10 @@ const employeeSchema = new mongoose.Schema(
       required: false,
       default: 0,
     },
+    employeeImagePublicId: {
+      type: String,
+      required: false,
+    },
     reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,
