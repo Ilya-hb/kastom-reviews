@@ -5,17 +5,21 @@ import avatar from "../assets/avatar.png";
 import { MdDeleteOutline } from "react-icons/md";
 import { MdOutlineEditNote } from "react-icons/md";
 import { MdLogout } from "react-icons/md";
+import Loader from "../components/Loader";
 
 export default function Admin() {
   const [employeeName, setEmployeeName] = useState("");
   const [employeeImage, setEmployeeImage] = useState(null); //TODO
   const [employees, setEmployees] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) navigate("/login");
+    setIsLoading(true);
     axios.get("/api//employee").then((res) => setEmployees(res.data.data));
+    setIsLoading(false);
   }, []);
 
   const handleLogout = () => {
@@ -23,12 +27,17 @@ export default function Admin() {
     navigate("/");
   };
   const handleDeleteEmployee = async (id) => {
-    await axios.delete(`/api//employee/${id}`);
+    setIsLoading(true);
+    await axios.delete(`/api//employee/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     setEmployees(employees.filter((el) => el._id !== id));
+    isLoading(false);
   };
 
   const handleCreate = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("employeeName", employeeName);
     if (employeeImage) formData.append("employeeImage", employeeImage);
@@ -46,13 +55,19 @@ export default function Admin() {
       setEmployees(updatedList.data.data);
       setEmployeeName("");
       setEmployeeImage(null);
+      setIsLoading(false);
     } catch (error) {
       console.log(`Create employee failed: ${error.message}`);
     }
   };
 
   return (
-    <div className="flex justify-center items-center flex-col container py-10 mx-auto">
+    <div className="flex justify-center items-center flex-col container py-10 mx-auto relative">
+      {isLoading && (
+        <div className="h-screen w-full absolute backdrop-blur-3xl">
+          <Loader />
+        </div>
+      )}
       <div className=" flex items-center gap-4">
         <h1 className="text-4xl">Admin Panel</h1>
 
