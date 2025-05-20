@@ -9,18 +9,28 @@ import Loader from "../components/Loader";
 
 export default function Admin() {
   const [employeeName, setEmployeeName] = useState("");
-  const [employeeImage, setEmployeeImage] = useState(null); //TODO
+  const [employeeImage, setEmployeeImage] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [editState, setEditState] = useState({
+    isModalOpen: false,
+    selectedEmployee: null,
+    updatedName: "",
+    updatedImage: null,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) navigate("/login");
+    fetchEmployees();
+  }, []);
+
+  const fetchEmployees = async () => {
     setIsLoading(true);
     axios.get("/api//employee").then((res) => setEmployees(res.data.data));
     setIsLoading(false);
-  }, []);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -34,6 +44,37 @@ export default function Admin() {
     });
     setEmployees(employees.filter((el) => el._id !== id));
     setIsLoading(false);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append("employeeName", editState.updatedName);
+    if (editState.updatedImage)
+      formData.append("employeeImage", editState.updatedImage);
+    try {
+      await axios.put(
+        `/api/employee/${editState.selectedEmployee._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      await fetchEmployees();
+      setEditState({
+        isModalOpen: false,
+        selectedEmployee: null,
+        updatedName: "",
+        updatedImage: null,
+      });
+    } catch (error) {
+      console.log("Employee update failed: ", error.message);
+    }
   };
 
   const handleCreate = async (e) => {
@@ -108,27 +149,80 @@ export default function Admin() {
       <div className="bg-neutral-900 rounded-xl p-5 w-full max-w-[500px] space-y-5 my-5">
         {employees.length > 0 ? (
           employees.map((employee) => (
-            <Link
-              to={`/admin/employee/${employee._id}`}
+            <div
               key={employee._id}
               className="flex items-center justify-around border-b-1 border-neutral-500 p-2"
             >
-              <div className="flex w-1/2 flex-col items-center space-y-2 hover:scale-105 transition duration-200 cursor-pointer">
-                <img
-                  src={employee.employeeImage || avatar}
-                  alt="employee"
-                  className="max-w-[100px] rounded-md"
-                />
-                <h3 className="text-lg  font-bold">{employee.employeeName}</h3>
-              </div>
+              {editState.isModalOpen ? (
+                <form
+                  onSubmit={handleUpdate}
+                  className="w-2/3 flex flex-col gap-4"
+                >
+                  <h2 className="text-md font-bold">Редактировать</h2>
+                  <input
+                    type="text"
+                    value={editState.updatedName}
+                    onChange={(e) =>
+                      setEditState((prev) => ({
+                        ...prev,
+                        updatedName: e.target.value,
+                      }))
+                    }
+                    className="border px-2 py-1 max-w-[150px] rounded-md"
+                    placeholder="Новое имя"
+                  />
+
+                  <input
+                    type="file"
+                    className="cursor-pointer hover:text-blue-500 transition"
+                    onChange={(e) =>
+                      setEditState((prev) => ({
+                        ...prev,
+                        updatedImage: e.target.files[0],
+                      }))
+                    }
+                  />
+                  <button
+                    type="submit"
+                    className="bg-green-600 transition cursor-pointer text-white px-4 py-1 rounded hover:bg-green-700"
+                  >
+                    Сохранить
+                  </button>
+                </form>
+              ) : (
+                <Link
+                  to={`/admin/employee/${employee._id}`}
+                  className="flex w-1/2 flex-col items-center space-y-2 hover:scale-105 transition duration-200 cursor-pointer"
+                >
+                  <img
+                    src={employee.employeeImage || avatar}
+                    alt="employee"
+                    className="max-w-[100px] rounded-md "
+                  />
+                  <h3 className="text-lg  font-bold">
+                    {employee.employeeName}
+                  </h3>
+                </Link>
+              )}
+
               <div className="flex justify-between items-center space-x-3">
-                <MdOutlineEditNote className="text-blue-400 icon" />
+                <MdOutlineEditNote
+                  className="text-blue-400 icon text-2xl cursor-pointer"
+                  onClick={() => {
+                    setEditState({
+                      isModalOpen: !editState.isModalOpen,
+                      selectedEmployee: employee,
+                      updatedName: employee.employeeName,
+                      updatedImage: null,
+                    });
+                  }}
+                />
                 <MdDeleteOutline
                   className=" text-red-500 icon"
                   onClick={(e) => handleDeleteEmployee(e, employee._id)}
                 />
               </div>
-            </Link>
+            </div>
           ))
         ) : (
           <h4 className="text-white">Список сотрудников пуст</h4>
