@@ -3,6 +3,7 @@ import axios from "axios";
 import Employee from "./components/Employee";
 import { Link } from "react-router";
 import Loader from "./components/Loader";
+import avatar from "./assets/avatar.png";
 
 function App() {
   const [employees, setEmployees] = useState([]);
@@ -46,24 +47,10 @@ function App() {
                 <Employee
                   employeeName={el.employeeName}
                   clickable={true}
+                  employeeImage={el.employeeImage || avatar}
                 />
                 {/* При нажатии открываеся страница с сотрудником */}
               </Link>
-
-              {/* <form className="flex flex-col space-y-3">
-                <textarea
-                  className="border p-3 w-[300px] max-w-[300px]"
-                  placeholder="Напишіть відгук тут"
-                  onChange={(e) => setReview(e.target.value)}
-                  maxLength={250}
-                ></textarea>
-                <button
-                  type="submit"
-                  className="border rounded border-logo"
-                >
-                  Надіслати
-                </button>
-              </form> */}
             </div>
           ))}
         </div>

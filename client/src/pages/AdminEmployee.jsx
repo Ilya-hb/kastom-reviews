@@ -59,7 +59,7 @@ export default function AdminEmployee() {
         <span className="text-md">Вернуться</span>
       </Link>
       <img
-        src={avatar}
+        src={employee.employeeImage || avatar}
         alt=""
         className="max-w-[150px]"
       />

@@ -115,9 +115,9 @@ export default function Admin() {
             >
               <div className="flex w-1/2 flex-col items-center space-y-2 hover:scale-105 transition duration-200 cursor-pointer">
                 <img
-                  src={employee.employeeImage}
+                  src={employee.employeeImage || avatar}
                   alt="employee"
-                  className="w-30 h-30 rounded-full"
+                  className="max-w-[100px] rounded-md"
                 />
                 <h3 className="text-lg  font-bold">{employee.employeeName}</h3>
               </div>

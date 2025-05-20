@@ -5,6 +5,7 @@ import Employee from "../components/Employee";
 import Loader from "../components/Loader";
 import RateEmployee from "../components/RateEmployee";
 import { HiArrowLongLeft } from "react-icons/hi2";
+import avatar from "../assets/avatar.png";
 
 export default function EmployeePage() {
   const { id } = useParams();
@@ -69,7 +70,10 @@ export default function EmployeePage() {
             <HiArrowLongLeft className="text-4xl" />
             <span className="text-md">Повернутись</span>
           </Link>
-          <Employee employeeName={employee.employeeName} />
+          <Employee
+            employeeName={employee.employeeName}
+            employeeImage={employee.employeeImage || avatar}
+          />
           <RateEmployee
             rating={rating}
             setRating={setRating}

@@ -5,6 +5,7 @@ export default function Employee({
   employeeName,
   averageRating,
   reviews,
+  employeeImage,
   clickable = false,
 }) {
   return (
@@ -14,9 +15,9 @@ export default function Employee({
       } `}
     >
       <img
-        src={avatar}
+        src={employeeImage || avatar}
         alt="Employee avatar"
-        className="w-full max-w-[200px]"
+        className="w-full max-w-[200px] rounded-md"
       />
       <h4 className="text-2xl">{employeeName}</h4>
     </div>
