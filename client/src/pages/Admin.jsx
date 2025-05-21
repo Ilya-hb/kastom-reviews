@@ -118,7 +118,7 @@ export default function Admin() {
           className="link cursor-pointer"
         />
       </div>
-      <hr className="w-15 h-2 my-5" />
+      <hr className="w-15 h-2 my-5 text-logo" />
       <h2 className="text-3xl">Создать сотрудника</h2>
       <form
         className="my-5 gap-3 flex flex-col"
@@ -134,7 +134,7 @@ export default function Admin() {
         <p>Загрузите изображение</p>
         <input
           type="file"
-          className="cursor-pointer hover:text-blue-500 transition"
+          className="cursor-pointer transition file:transition file:mr-4 file:rounded-md file:border-0 file:bg-logo file:px-4 file:py-2 file:text-sm file:font-semibold file:cursor-pointer hover:file:bg-darker-logo"
           onChange={(e) => setEmployeeImage(e.target.files[0])}
         />
         <button
@@ -146,14 +146,15 @@ export default function Admin() {
       </form>
       <hr className="w-15 h-2 my-5" />
       <h2 className="text-xl">Список сотрудников:</h2>
-      <div className="bg-neutral-900 rounded-xl p-5 w-full max-w-[500px] space-y-5 my-5">
+      <div className="bg-neutral-900 rounded-xl p-5 w-full md:max-w-[500px] space-y-4 my-5">
         {employees.length > 0 ? (
           employees.map((employee) => (
             <div
               key={employee._id}
               className="flex items-center justify-around border-b-1 border-neutral-500 p-2"
             >
-              {editState.isModalOpen ? (
+              {editState.isModalOpen &&
+              editState.selectedEmployee?._id === employee._id ? (
                 <form
                   onSubmit={handleUpdate}
                   className="w-2/3 flex flex-col gap-4"
@@ -174,7 +175,7 @@ export default function Admin() {
 
                   <input
                     type="file"
-                    className="cursor-pointer hover:text-blue-500 transition"
+                    className="cursor-pointer transition file:transition file:mr-4 file:rounded-md file:border-0 file:bg-logo file:px-4 file:py-2 file:text-sm file:font-semibold file:cursor-pointer hover:file:bg-darker-logo"
                     onChange={(e) =>
                       setEditState((prev) => ({
                         ...prev,

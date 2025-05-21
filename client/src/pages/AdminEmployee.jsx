@@ -43,6 +43,7 @@ export default function AdminEmployee() {
   }, [id, navigate]);
 
   const handleDeleteReview = async (id) => {
+    console.log(id);
     await axios.delete(`/api/${id}`);
     setReviews(reviews.filter((el) => el._id !== id));
   };
@@ -80,7 +81,7 @@ export default function AdminEmployee() {
             <div
               key={el._id}
               className="w-full p-1 relative cursor-pointer hover:scale-105 transition"
-              onClick={(el) => handleDeleteReview(el._id)}
+              onClick={() => handleDeleteReview(el._id)}
             >
               <div
                 className={`w-full transition bg-red-400 ${
