@@ -45,10 +45,22 @@ export const postReview = async (req, res) => {
 
 export const deleteReview = async (req, res) => {
   const { id } = req.params;
-  console.log("id:", id);
+
   try {
+    const reviewToDelete = await Review.findById(id);
+    if (!reviewToDelete)
+      return res
+        .status(404)
+        .json({ success: false, message: "Review not found" });
+
+    const employeeId = reviewToDelete.employee;
     await Review.findByIdAndDelete(id);
-    await countAverageRating(id);
+
+    console.log(employeeId);
+    console.log(reviewToDelete.employee);
+
+    await countAverageRating(employeeId);
+
     res.status(200).json({ success: true, message: "Review deleted" });
   } catch (error) {
     console.log("Error in deleting review: ", error.message);

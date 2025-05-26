@@ -4,6 +4,7 @@ import {
   deleteEmployee,
   postEmployee,
   getEmployeeByID,
+  updateEmployee,
 } from "../controllers/employee.controller.js";
 import { upload } from "../middleware/upload.js";
 
@@ -14,6 +15,13 @@ const router = express.Router();
 router.get("/employee", getEmployee);
 
 router.get("/employee/:id", getEmployeeByID);
+
+router.put(
+  "/employee/:id",
+  verifyToken,
+  upload.single("employeeImage"),
+  updateEmployee
+);
 
 router.post(
   "/employee",

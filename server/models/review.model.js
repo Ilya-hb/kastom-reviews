@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const reviewSchema = new mongoose.Schema(
   {
+    employee: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Employee",
+      required: true,
+    },
     clientName: {
       type: String,
       required: false,
