@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LuBolt } from "react-icons/lu";
+import { FaStar } from "react-icons/fa6";
 
 export default function RateEmployee({ count = 5, rating, setRating }) {
   const [hover, setHover] = useState(0);
@@ -21,9 +21,11 @@ export default function RateEmployee({ count = 5, rating, setRating }) {
       {[...Array(count)].map((_, index) => {
         index += 1;
         return (
-          <LuBolt
+          <FaStar
             className={`${
-              index <= (hover || rating) ? "text-logo" : ""
+              index <= (hover || rating)
+                ? "text-yellow-300"
+                : "text-neutral-700"
             } cursor-pointer hover:scale-105 transition duration-200 `}
             key={index}
             onClick={() => handleClick(index)}

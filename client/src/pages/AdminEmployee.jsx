@@ -1,11 +1,13 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { data, Link, useNavigate, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router";
 import Loader from "../components/Loader";
 import avatar from "../assets/avatar.png";
 import { HiArrowLongLeft } from "react-icons/hi2";
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
+import { MdDelete } from "react-icons/md";
+import { MdArrowBackIos } from "react-icons/md";
 
 export default function AdminEmployee() {
   const { id } = useParams();
@@ -27,27 +29,37 @@ export default function AdminEmployee() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`/api/employee/${id}`);
-        const employeeData = res.data.data;
-        setEmployee(employeeData);
-        setReviews(employeeData.reviews);
-        console.log(employeeData.reviews);
-      } catch (error) {
-        console.log("Сотрудник не найден", error.message);
-        navigate("/admin");
-      }
-    };
     fetchData();
   }, [id, navigate]);
 
-  const handleDeleteReview = async (id) => {
-    console.log(id);
-    await axios.delete(`/api/${id}`);
-    setReviews(reviews.filter((el) => el._id !== id));
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`/api/employee/${id}`);
+      const employeeData = res.data.data;
+
+      setEmployee(employeeData);
+      setReviews(employeeData.reviews);
+      console.log(employeeData.reviews);
+    } catch (error) {
+      console.log("Сотрудник не найден", error.message);
+      navigate("/admin");
+    }
   };
 
+  const handleDeleteReview = async (id) => {
+    console.log(id);
+    try {
+      await axios.delete(`/api/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      // await axios.delete(`/api/${id}`);
+      setReviews(reviews.filter((el) => el._id !== id));
+      fetchData();
+    } catch (error) {
+      console.log("Error in deleting review: ", error.message);
+    }
+  };
+  console.log(clickedReview);
   if (!employee) return <Loader />;
 
   return (
@@ -80,14 +92,25 @@ export default function AdminEmployee() {
           reviews.map((el) => (
             <div
               key={el._id}
-              className="w-full p-1 relative cursor-pointer hover:scale-105 transition"
-              onClick={() => handleDeleteReview(el._id)}
+              className="w-full p-1 relative cursor-pointer transition"
+              onClick={() => setClickedReview(!clickedReview)}
             >
               <div
-                className={`w-full transition bg-red-400 ${
-                  clickedReview ? "opacity-0 hidden" : "absolute opacity-100"
+                className={`w-full transition flex items-center justify-around ${
+                  !clickedReview
+                    ? "opacity-0 hidden"
+                    : "absolute backdrop-blur-xs h-full "
                 }`}
-              ></div>
+              >
+                <MdArrowBackIos
+                  className="text-5xl icon text-blue-500"
+                  onClick={() => setClickedReview(false)}
+                />
+                <MdDelete
+                  className="text-5xl icon text-red-600"
+                  onClick={() => handleDeleteReview(el._id)}
+                />
+              </div>
               <div className="flex justify-between w-full">
                 <div className="flex items-center gap-2">
                   <p className="text-xl">Оценка: {el.reviewMark}</p>
