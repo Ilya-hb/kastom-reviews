@@ -9,6 +9,7 @@ import "./index.css";
 import App from "./App.jsx";
 import EmployeePage from "./pages/EmployeePage.jsx";
 import AdminEmployee from "./pages/AdminEmployee.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -36,6 +37,10 @@ createRoot(document.getElementById("root")).render(
         <Route
           path="/employee/:id"
           element={<EmployeePage />}
+        />
+        <Route
+          path="*"
+          element={<NotFound />}
         />
       </Routes>
     </BrowserRouter>
