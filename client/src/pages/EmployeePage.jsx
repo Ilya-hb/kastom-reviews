@@ -1,5 +1,4 @@
 import axios from "../../utils/axiosInstance.js";
-w;
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Employee from "../components/Employee";
