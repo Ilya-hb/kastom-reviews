@@ -28,7 +28,7 @@ export default function Admin() {
 
   const fetchEmployees = async () => {
     setIsLoading(true);
-    axios.get("/api//employee").then((res) => setEmployees(res.data.data));
+    axios.get("/api/employee").then((res) => setEmployees(res.data.data));
     setIsLoading(false);
   };
 
@@ -39,7 +39,7 @@ export default function Admin() {
   const handleDeleteEmployee = async (e, id) => {
     e.preventDefault();
     setIsLoading(true);
-    await axios.delete(`/api//employee/${id}`, {
+    await axios.delete(`/api/employee/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     setEmployees(employees.filter((el) => el._id !== id));
@@ -91,7 +91,7 @@ export default function Admin() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      const updatedList = await axios.get(`/api//employee`, {
+      const updatedList = await axios.get(`/api/employee`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setEmployees(updatedList.data.data);
