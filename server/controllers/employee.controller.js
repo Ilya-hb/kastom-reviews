@@ -27,8 +27,6 @@ export const getEmployeeByID = async (req, res) => {
 
 export const postEmployee = async (req, res) => {
   const { employeeName } = req.body;
-  console.log(req.body);
-  console.log(req.file);
 
   if (!employeeName) {
     return res
