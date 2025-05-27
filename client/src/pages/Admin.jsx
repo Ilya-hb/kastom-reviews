@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../utils/axiosInstance.js";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import avatar from "../assets/avatar.png";

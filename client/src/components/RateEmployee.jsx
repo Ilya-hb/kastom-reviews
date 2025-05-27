@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaStar } from "react-icons/fa6";
 
 export default function RateEmployee({ count = 5, rating, setRating }) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../utils/axiosInstance.js";
 import Employee from "./components/Employee";
 import { Link } from "react-router";
 import Loader from "./components/Loader";
