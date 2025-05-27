@@ -1,9 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Employee from "../components/Employee";
 import Loader from "../components/Loader";
 import RateEmployee from "../components/RateEmployee";
+import toast, { Toaster } from "react-hot-toast";
 import { HiArrowLongLeft } from "react-icons/hi2";
 import avatar from "../assets/avatar.png";
 
@@ -31,6 +32,17 @@ export default function EmployeePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const reviewedEmployees =
+      JSON.parse(localStorage.getItem("reviewedEmployees")) || [];
+
+    if (reviewedEmployees.includes(id)) {
+      toast("Вибачте, вже оцінили цього співробітника!", {
+        duration: 1800,
+        icon: "❗",
+      });
+      return;
+    }
+
     if (!review.trim()) {
       setError("Будь ласка, введіть текст відгуку");
       return;
@@ -46,11 +58,19 @@ export default function EmployeePage() {
         reviewText: review,
         reviewMark: rating,
       });
+      reviewedEmployees.push(id);
+      localStorage.setItem(
+        "reviewedEmployees",
+        JSON.stringify(reviewedEmployees)
+      );
       setReview("");
       setRating(null);
+      toast.success("Дякуємо за відгук!");
     } catch (error) {
+      toast.error("Щось пішло не так...");
       console.log(error.message);
     }
+
     setIsLoading(false);
   };
 
@@ -63,6 +83,10 @@ export default function EmployeePage() {
           className="container flex flex-col mx-auto pt-10 items-center justify-center gap-5 px-3"
           onSubmit={handleSubmit}
         >
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+          />
           <Link
             to="/"
             className="flex gap-2 items-center hover:text-logo transition duration-200 self-start cursor-pointer"

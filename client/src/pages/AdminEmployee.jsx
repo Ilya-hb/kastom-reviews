@@ -13,7 +13,7 @@ export default function AdminEmployee() {
   const { id } = useParams();
   const [employee, setEmployee] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [clickedReview, setClickedReview] = useState(false);
+  const [clickedReview, setClickedReview] = useState(null);
   const navigate = useNavigate();
 
   const formatDate = (unformattedData) => {
@@ -39,7 +39,6 @@ export default function AdminEmployee() {
 
       setEmployee(employeeData);
       setReviews(employeeData.reviews);
-      console.log(employeeData.reviews);
     } catch (error) {
       console.log("Сотрудник не найден", error.message);
       navigate("/admin");
@@ -47,7 +46,6 @@ export default function AdminEmployee() {
   };
 
   const handleDeleteReview = async (id) => {
-    console.log(id);
     try {
       await axios.delete(`/api/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -55,11 +53,12 @@ export default function AdminEmployee() {
       // await axios.delete(`/api/${id}`);
       setReviews(reviews.filter((el) => el._id !== id));
       fetchData();
+      setClickedReview(false);
     } catch (error) {
       console.log("Error in deleting review: ", error.message);
     }
   };
-  console.log(clickedReview);
+
   if (!employee) return <Loader />;
 
   return (
@@ -92,37 +91,39 @@ export default function AdminEmployee() {
           reviews.map((el) => (
             <div
               key={el._id}
-              className="w-full p-1 relative cursor-pointer transition"
-              onClick={() => setClickedReview(!clickedReview)}
+              className="w-full p-1 relative group transition"
             >
-              <div
-                className={`w-full transition flex items-center justify-around ${
-                  !clickedReview
-                    ? "opacity-0 hidden"
-                    : "absolute backdrop-blur-xs h-full "
-                }`}
-              >
-                <MdArrowBackIos
-                  className="text-5xl icon text-blue-500"
-                  onClick={() => setClickedReview(false)}
-                />
-                <MdDelete
-                  className="text-5xl icon text-red-600"
-                  onClick={() => handleDeleteReview(el._id)}
-                />
-              </div>
-              <div className="flex justify-between w-full">
-                <div className="flex items-center gap-2">
-                  <p className="text-xl">Оценка: {el.reviewMark}</p>
-                  <FaRegStar className="text-xl text-amber-400" />
+              {clickedReview === el._id && (
+                <div className="w-full absolute top-0 left-0 flex items-center justify-around backdrop-blur-xs h-full z-10">
+                  <MdArrowBackIos
+                    className="text-5xl icon text-blue-500"
+                    onClick={() => setClickedReview(null)}
+                  />
+                  <MdDelete
+                    className="text-5xl icon text-red-600"
+                    onClick={() => handleDeleteReview(el._id)}
+                  />
                 </div>
+              )}
 
-                <span className="justify-end text-neutral-500">
-                  {formatDate(el.createdAt)}
-                </span>
+              <div
+                className="flex flex-col cursor-pointer"
+                onClick={() =>
+                  setClickedReview((prev) => (prev === el._id ? null : el._id))
+                }
+              >
+                <div className="flex justify-between w-full">
+                  <div className="flex items-center gap-2">
+                    <p className="text-xl">Оценка: {el.reviewMark}</p>
+                    <FaRegStar className="text-xl text-amber-400" />
+                  </div>
+                  <span className="justify-end text-neutral-500">
+                    {formatDate(el.createdAt)}
+                  </span>
+                </div>
+                <p className="text-xl">{el.reviewText}</p>
+                <hr className="text-neutral-600 w-full" />
               </div>
-              <p className="text-xl">{el.reviewText}</p>
-              <hr className="text-neutral-600 w-full" />
             </div>
           ))
         ) : (
