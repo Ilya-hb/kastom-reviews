@@ -75,3 +75,6 @@ kastom-reviews/
 
 🧑‍💻 Разработчик: Ilya-hb  
 📁 Репозиторий: [GitHub](https://github.com/Ilya-hb/kastom-reviews)
+
+![image](https://github.com/user-attachments/assets/2a0e61b7-49b9-4d77-b8ce-0f13e9c8be09)
+
