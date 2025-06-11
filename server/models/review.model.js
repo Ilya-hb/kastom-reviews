@@ -8,8 +8,9 @@ const reviewSchema = new mongoose.Schema(
       required: true,
     },
 
-    clientIP: {
+    clientIp: {
       type: String,
+      reqiured: true,
     },
 
     reviewText: {

@@ -17,8 +17,7 @@ export const getReviews = async (req, res) => {
 export const postReview = async (req, res) => {
   const employeeId = req.params.id;
   const { reviewText, reviewMark } = req.body;
-
-  console.log(req.clientIp);
+  const clientIp = req.clientIp;
   if (!reviewMark)
     return res.status(400).json({ message: "Будь ласка, заповніть усі поля!" });
   try {
@@ -26,10 +25,11 @@ export const postReview = async (req, res) => {
       employee: employeeId,
       reviewText,
       reviewMark,
-      clientIp: req.clientIp,
+      clientIp,
     });
-    console.log(clientIp);
+    // console.log(req.clientIp);
     const savedReview = await newReview.save();
+    // console.log(newReview);
 
     await Employee.findByIdAndUpdate(employeeId, {
       $push: { reviews: savedReview._id },

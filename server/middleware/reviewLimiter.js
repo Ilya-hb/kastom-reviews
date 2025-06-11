@@ -4,7 +4,7 @@ export const reviewLimiter = async (req, res, next) => {
   const clientIp = req.ip || req.headers["x-forwarded-for"] || "unknown";
   const employeeId = req.params.id;
   console.log(req.ip);
-  const timeLimitMs = 10 * 1000;
+  const timeLimitMs = 60 * 60 * 1000 * 12;
   const timeThreshold = new Date(Date.now() - timeLimitMs);
 
   const recentReview = await Review.findOne({
