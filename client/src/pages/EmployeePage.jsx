@@ -32,18 +32,7 @@ export default function EmployeePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const reviewedEmployees =
-      JSON.parse(localStorage.getItem("reviewedEmployees")) || [];
-
-    if (reviewedEmployees.includes(id)) {
-      toast("Вибачте, вже оцінили цього співробітника!", {
-        duration: 1800,
-        icon: "❗",
-      });
-      return;
-    }
-
-    if (!review.trim()) {
+    if (rating <= 3 && !review.trim()) {
       setError("Будь ласка, введіть текст відгуку");
       return;
     }
@@ -58,17 +47,22 @@ export default function EmployeePage() {
         reviewText: review,
         reviewMark: rating,
       });
-      reviewedEmployees.push(id);
-      localStorage.setItem(
-        "reviewedEmployees",
-        JSON.stringify(reviewedEmployees)
-      );
+
       setReview("");
       setRating(null);
       toast.success("Дякуємо за відгук!");
     } catch (error) {
-      toast.error("Щось пішло не так...");
-      console.log(error.message);
+      if (error.response?.status === 429) {
+        toast(
+          "Ви вже залишили відгук для цього співробітника. Спробуйте пізніше",
+          {
+            duration: 1800,
+            icon: "⏳",
+          }
+        );
+      } else {
+        toast.error(`Щось пішло не так... \n${error.message}`);
+      }
     }
 
     setIsLoading(false);
@@ -103,14 +97,19 @@ export default function EmployeePage() {
             setRating={setRating}
             required
           />
-          <textarea
-            className={`border-2 ${
-              error ? "border-red-500" : "border-logo"
-            } px-4 py-2 w-full max-w-[350px] sm:w-[350px] sm:h-[100px] rounded-xl caret-amber-500 active:border-logo focus:border-logo`}
-            placeholder="Ваш відгук про співпробітника"
-            onChange={(e) => setReview(e.target.value)}
-            required
-          ></textarea>
+          {rating <= 3 && rating !== null ? (
+            <textarea
+              className={`border-2 ${
+                error ? "border-red-500" : "border-logo"
+              } px-4 py-2 w-full max-w-[350px] sm:w-[350px] sm:h-[100px] rounded-xl caret-amber-500 active:border-logo focus:border-logo`}
+              placeholder="Що саме не сподобалось? 🥺"
+              onChange={(e) => setReview(e.target.value)}
+              required
+            ></textarea>
+          ) : (
+            ""
+          )}
+
           <button
             type="submit"
             className="px-10 py-3 bg-logo hover:bg-darker-logo transition cursor-pointer rounded-xl active:bg-black"
