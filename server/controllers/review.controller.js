@@ -18,6 +18,7 @@ export const postReview = async (req, res) => {
   const employeeId = req.params.id;
   const { reviewText, reviewMark } = req.body;
 
+  console.log(req.clientIp);
   if (!reviewMark)
     return res.status(400).json({ message: "Будь ласка, заповніть усі поля!" });
   try {

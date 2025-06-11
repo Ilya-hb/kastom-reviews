@@ -7,7 +7,7 @@ import authRoute from "./routes/auth.route.js";
 import cors from "cors";
 dotenv.config();
 const app = express();
-
+app.set("trust proxy", true);
 app.use(express.json()); // allows us to accept JSON data in the req.body
 app.use(cors({ origin: "https://kastom-reviews.vercel.app" }));
 // app.use(cors());
