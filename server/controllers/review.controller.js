@@ -16,18 +16,18 @@ export const getReviews = async (req, res) => {
 
 export const postReview = async (req, res) => {
   const employeeId = req.params.id;
-
   const { reviewText, reviewMark } = req.body;
 
-  if (!reviewText || !reviewMark)
+  if (!reviewMark)
     return res.status(400).json({ message: "Будь ласка, заповніть усі поля!" });
-
   try {
     const newReview = new Review({
       employee: employeeId,
       reviewText,
       reviewMark,
+      clientIp: req.clientIp,
     });
+    console.log(clientIp);
     const savedReview = await newReview.save();
 
     await Employee.findByIdAndUpdate(employeeId, {

@@ -7,13 +7,12 @@ const reviewSchema = new mongoose.Schema(
       ref: "Employee",
       required: true,
     },
-    clientName: {
-      type: String,
-      required: false,
-    },
+
+    clientIP: String,
+
     reviewText: {
       type: String,
-      required: true,
+      required: false,
     },
     reviewMark: {
       type: Number,

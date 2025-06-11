@@ -10,6 +10,7 @@ const app = express();
 
 app.use(express.json()); // allows us to accept JSON data in the req.body
 app.use(cors({ origin: "https://kastom-reviews.vercel.app" }));
+// app.use(cors());
 app.use("/api/", reviewRoutes);
 app.use("/api/", employeeRoute);
 app.use("/api/", authRoute);

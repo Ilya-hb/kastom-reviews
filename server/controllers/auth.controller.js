@@ -4,8 +4,8 @@ export const loginAdmin = (req, res) => {
   const { username, password } = req.body;
 
   const ADMIN = {
-    username: "admin",
-    password: "1234",
+    username: process.env.ADMIN,
+    password: process.env.PASSWORD,
   };
 
   if (username === ADMIN.username && password === ADMIN.password) {
